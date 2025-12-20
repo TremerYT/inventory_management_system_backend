@@ -39,5 +39,5 @@ public class Orders {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    private Customers customer;
+    private Customer customer;
 }

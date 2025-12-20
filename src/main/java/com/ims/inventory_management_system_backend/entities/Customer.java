@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Customers {
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -43,7 +43,7 @@ public class Customers {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(updatable = false)
+    @Column(updatable = true)
     @CreationTimestamp
     private LocalDateTime updatedAt;
 
@@ -51,8 +51,8 @@ public class Customers {
     private List<Orders> orders;
 
     @OneToMany(mappedBy="customer", cascade=CascadeType.ALL)
-    private List<CustomerAddresses> customerAddresses;
+    private List<Address> Addresses;
 
     @OneToMany(mappedBy="customer", cascade=CascadeType.ALL)
-    private List<OrderItems> orderItems;
+    private List<Return> orderItems;
 }
