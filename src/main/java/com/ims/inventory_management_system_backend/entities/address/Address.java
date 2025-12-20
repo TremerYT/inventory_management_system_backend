@@ -1,5 +1,6 @@
-package com.ims.inventory_management_system_backend.entities;
+package com.ims.inventory_management_system_backend.entities.address;
 
+import com.ims.inventory_management_system_backend.entities.customers.Customer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,5 +1,7 @@
-package com.ims.inventory_management_system_backend.entities;
+package com.ims.inventory_management_system_backend.entities.orders;
 
+import com.ims.inventory_management_system_backend.entities.customers.Customer;
+import com.ims.inventory_management_system_backend.entities.order_items.OrderItems;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -40,4 +43,7 @@ public class Orders {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
+    private List<OrderItems> orderItems;
 }
