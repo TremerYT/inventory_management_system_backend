@@ -1,6 +1,7 @@
 package com.ims.inventory_management_system_backend.entities.order_items;
 
 import com.ims.inventory_management_system_backend.entities.orders.Orders;
+import com.ims.inventory_management_system_backend.entities.product.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,4 +34,8 @@ public class OrderItems {
 
     @Column(name = "sub_total", nullable = false)
     private Double subTotal;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 }
