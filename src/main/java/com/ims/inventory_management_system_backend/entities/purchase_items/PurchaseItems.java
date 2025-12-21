@@ -1,0 +1,39 @@
+package com.ims.inventory_management_system_backend.entities.purchase_items;
+
+import com.ims.inventory_management_system_backend.entities.product.Product;
+import com.ims.inventory_management_system_backend.entities.purchase.Purchase;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Table(name = "purchase_items")
+@Getter
+@Setter
+@NoArgsConstructor
+public class PurchaseItems {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
+
+    @Column(name = "unit_cost", nullable = false)
+    private Integer unitCost;
+
+    @Column(name = "discount", nullable = false)
+    private Double discount;
+
+    @Column(name = "sub_total", nullable = false)
+    private Double subTotal;
+
+    @ManyToOne
+    @JoinColumn(name = "purchase_id")
+    private Purchase purchases;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product products;
+}

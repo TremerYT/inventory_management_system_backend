@@ -2,7 +2,7 @@ package com.ims.inventory_management_system_backend.entities.customers;
 
 import com.ims.inventory_management_system_backend.entities.address.Address;
 import com.ims.inventory_management_system_backend.entities.orders.Orders;
-import com.ims.inventory_management_system_backend.entities.returns.Return;
+import com.ims.inventory_management_system_backend.entities.returns.OrderReturn;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -58,5 +58,5 @@ public class Customer {
     private List<Address> Addresses;
 
     @OneToMany(mappedBy="customer", cascade=CascadeType.ALL)
-    private List<Return> orderReturns;
+    private List<OrderReturn> orderReturns;
 }

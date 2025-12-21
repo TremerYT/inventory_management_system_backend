@@ -1,6 +1,7 @@
 package com.ims.inventory_management_system_backend.entities.address;
 
 import com.ims.inventory_management_system_backend.entities.customers.Customer;
+import com.ims.inventory_management_system_backend.entities.supplier.Supplier;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,7 +42,11 @@ public class Address {
     private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinTable(name = "customer_id")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
+    private Supplier supplier;
 
 }
