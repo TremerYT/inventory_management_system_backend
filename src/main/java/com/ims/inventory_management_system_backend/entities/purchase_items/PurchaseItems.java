@@ -31,9 +31,9 @@ public class PurchaseItems {
 
     @ManyToOne
     @JoinColumn(name = "purchase_id")
-    private Purchase purchases;
+    private Purchase purchase;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
-    private Product products;
+    private Product product;
 }

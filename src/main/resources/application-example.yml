@@ -1,9 +1,15 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/ims_db
-    username: your_username
-    password: your_password
-
-  jpa:
+    url: databaseurl
+    username: database username
+    password: database password
+    driver-class-name: org.postgresql.Driver
+  Jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
