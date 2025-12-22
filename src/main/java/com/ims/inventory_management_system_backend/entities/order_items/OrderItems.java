@@ -42,7 +42,7 @@ public class OrderItems {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 }

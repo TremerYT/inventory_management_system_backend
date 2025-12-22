@@ -38,7 +38,7 @@ public class Purchase {
     @Column(name = "total_amount", nullable = false)
     private Double totalAmount;
 
-    @Column(name = "Created_at", nullable = false)
+    @Column(name = "Created_at", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 

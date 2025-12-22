@@ -36,7 +36,7 @@ public class PurchaseReturn {
     @OneToMany(mappedBy = "purchaseReturn", cascade = CascadeType.ALL)
     private List<PurchaseReturnItems> purchaseReturnItems;
 
-    @Column(name = "return_date",nullable = false)
+    @Column(name = "return_date",nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime returnDate;
 

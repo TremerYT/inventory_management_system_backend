@@ -39,7 +39,7 @@ public class OrderReturnItems {
     @Column(name = "sub_total", nullable = false)
     private Double subTotal;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 }
