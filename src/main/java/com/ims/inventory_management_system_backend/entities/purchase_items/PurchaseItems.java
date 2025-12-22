@@ -24,7 +24,7 @@ public class PurchaseItems {
     private Integer quantity;
 
     @Column(name = "unit_cost", nullable = false)
-    private Integer unitCost;
+    private Double unitCost;
 
     @Column(name = "discount", nullable = false)
     private Double discount;

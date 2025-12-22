@@ -25,7 +25,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "SKU_Number", nullable = false, unique = true, length = 30)
+    @Column(name = "sku_number", nullable = false, unique = true, length = 30)
     private String skuNumber;
 
     @ManyToOne
@@ -64,9 +64,9 @@ public class Product {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product")
     private List<OrderItems> orderItems;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product")
     private List<PurchaseItems> purchaseItems;
 }

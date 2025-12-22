@@ -12,7 +12,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "orderItems")
+@Table(name = "order_items")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,7 +23,7 @@ public class OrderItems {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", nullable = false)
     private Orders orders;
 
     @Column(name = "quantity", nullable = false)

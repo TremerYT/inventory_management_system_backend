@@ -38,15 +38,15 @@ public class Purchase {
     @Column(name = "total_amount", nullable = false)
     private Double totalAmount;
 
-    @Column(name = "Created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PurchaseItems> purchaseItems;
 
-    @ManyToOne
-    @JoinColumn(name = "supplier_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "supplier_id", nullable = false)
     private Supplier supplier;
 
 }

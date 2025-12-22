@@ -33,7 +33,7 @@ public class PurchaseReturn {
     @JoinColumn(name = "purchase_id")
     private Purchase purchase;
 
-    @OneToMany(mappedBy = "purchaseReturn", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "purchaseReturn", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PurchaseReturnItems> purchaseReturnItems;
 
     @Column(name = "return_date",nullable = false, updatable = false)

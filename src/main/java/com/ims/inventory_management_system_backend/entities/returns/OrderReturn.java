@@ -32,7 +32,7 @@ public class OrderReturn {
     @JoinColumn(name = "order_id")
     private Orders orders;
 
-    @OneToMany(mappedBy = "orderReturn", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "orderReturn", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<OrderReturnItems> orderReturnItems;
 
     @Column(name = "return_date",nullable = false)
@@ -46,5 +46,5 @@ public class OrderReturn {
     private String status;
 
     @Column(name = "refund_amount", nullable = false)
-    private Double RefundAmount;
+    private Double refundAmount;
 }

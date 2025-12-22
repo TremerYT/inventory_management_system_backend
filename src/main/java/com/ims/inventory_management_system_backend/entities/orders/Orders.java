@@ -41,11 +41,11 @@ public class Orders {
     @Column(name = "status", nullable = false)
     private String status;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "orders", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<OrderItems> orderItems;
 
     @Column(name = "created_at", nullable = false, updatable = false)

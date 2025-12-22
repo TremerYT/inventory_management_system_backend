@@ -51,12 +51,12 @@ public class Customer {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy="customer", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy="customer")
     private List<Orders> orders;
 
-    @OneToMany(mappedBy="customer", cascade=CascadeType.ALL)
-    private List<Address> Addresses;
+    @OneToMany(mappedBy="customer", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    private List<Address> addresses;
 
-    @OneToMany(mappedBy="customer", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy="customer")
     private List<OrderReturn> orderReturns;
 }
