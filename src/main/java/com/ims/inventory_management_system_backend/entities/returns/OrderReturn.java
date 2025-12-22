@@ -1,6 +1,7 @@
 package com.ims.inventory_management_system_backend.entities.returns;
 
 import com.ims.inventory_management_system_backend.entities.customers.Customer;
+import com.ims.inventory_management_system_backend.entities.order_items.OrderReturnItems;
 import com.ims.inventory_management_system_backend.entities.orders.Orders;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "order_returns")
@@ -29,6 +31,9 @@ public class OrderReturn {
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Orders orders;
+
+    @OneToMany(mappedBy = "orderReturn", cascade = CascadeType.ALL)
+    private List<OrderReturnItems> orderReturnItems;
 
     @Column(name = "return_date",nullable = false)
     @CreationTimestamp

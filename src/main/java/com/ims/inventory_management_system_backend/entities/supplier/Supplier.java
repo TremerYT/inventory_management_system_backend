@@ -1,7 +1,9 @@
 package com.ims.inventory_management_system_backend.entities.supplier;
 
 import com.ims.inventory_management_system_backend.entities.address.Address;
+import com.ims.inventory_management_system_backend.entities.purchase.Purchase;
 import com.ims.inventory_management_system_backend.entities.returns.PurchaseReturn;
+import com.ims.inventory_management_system_backend.entities.returns.PurchaseReturnItems;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,10 +41,13 @@ public class Supplier {
     private String phoneNumber;
 
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Address> supplierAddresses = new ArrayList<>();
+    private List<Address> supplierAddresses;
 
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PurchaseReturn> purchaseReturns = new ArrayList<>();
+    private List<PurchaseReturn> purchaseReturns;
+
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Purchase> purchases;
 
     @Column(updatable = false)
     @CreationTimestamp

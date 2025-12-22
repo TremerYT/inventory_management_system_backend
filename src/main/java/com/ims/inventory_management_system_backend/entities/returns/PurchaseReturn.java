@@ -12,6 +12,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "purchase_return")
@@ -31,6 +32,9 @@ public class PurchaseReturn {
     @ManyToOne
     @JoinColumn(name = "purchase_id")
     private Purchase purchase;
+
+    @OneToMany(mappedBy = "purchaseReturn", cascade = CascadeType.ALL)
+    private List<PurchaseReturnItems> purchaseReturnItems;
 
     @Column(name = "return_date",nullable = false)
     @CreationTimestamp
