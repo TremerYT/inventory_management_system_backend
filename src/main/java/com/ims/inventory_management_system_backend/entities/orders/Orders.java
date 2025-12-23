@@ -1,7 +1,6 @@
 package com.ims.inventory_management_system_backend.entities.orders;
 
 import com.ims.inventory_management_system_backend.entities.customers.Customer;
-import com.ims.inventory_management_system_backend.entities.order_items.OrderItems;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

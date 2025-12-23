@@ -1,6 +1,5 @@
 package com.ims.inventory_management_system_backend.entities.purchase;
 
-import com.ims.inventory_management_system_backend.entities.purchase_items.PurchaseItems;
 import com.ims.inventory_management_system_backend.entities.supplier.Supplier;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

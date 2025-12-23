@@ -1,9 +1,7 @@
-package com.ims.inventory_management_system_backend.entities.order_items;
+package com.ims.inventory_management_system_backend.entities.purchase;
 
-import com.ims.inventory_management_system_backend.entities.orders.Orders;
 import com.ims.inventory_management_system_backend.entities.product.Product;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,22 +10,17 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "order_items")
+@Table(name = "purchase_items")
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class OrderItems {
+public class PurchaseItems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
-    private Orders orders;
-
     @Column(name = "quantity", nullable = false)
-    private Double quantity;
+    private Integer quantity;
 
     @Column(name = "unit_cost", nullable = false)
     private Double unitCost;
@@ -39,10 +32,14 @@ public class OrderItems {
     private Double subTotal;
 
     @ManyToOne
+    @JoinColumn(name = "purchase_id")
+    private Purchase purchase;
+
+    @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 }
