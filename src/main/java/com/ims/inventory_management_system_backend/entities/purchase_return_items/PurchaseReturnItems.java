@@ -1,6 +1,7 @@
-package com.ims.inventory_management_system_backend.entities.order_items;
+package com.ims.inventory_management_system_backend.entities.purchase_return_items;
 
-import com.ims.inventory_management_system_backend.entities.returns.OrderReturn;
+import com.ims.inventory_management_system_backend.entities.purchase_items.PurchaseItems;
+import com.ims.inventory_management_system_backend.entities.purchase_return.PurchaseReturn;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,27 +9,26 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "order_return_items")
+@Table(name = "purchase_return_items")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderReturnItems {
+public class PurchaseReturnItems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "order_return_id", nullable = false)
-    private OrderReturn orderReturn;
+    @JoinColumn(name = "purchase_return_id", nullable = false)
+    private PurchaseReturn purchaseReturn;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_item_id", nullable = false)
-    private OrderItems orderItem;
+    @JoinColumn(name = "purchase_item_id", nullable = false)
+    private PurchaseItems purchaseItems;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;

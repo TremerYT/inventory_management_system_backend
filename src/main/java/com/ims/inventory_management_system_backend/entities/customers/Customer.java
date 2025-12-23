@@ -2,7 +2,7 @@ package com.ims.inventory_management_system_backend.entities.customers;
 
 import com.ims.inventory_management_system_backend.entities.address.Address;
 import com.ims.inventory_management_system_backend.entities.orders.Orders;
-import com.ims.inventory_management_system_backend.entities.returns.OrderReturn;
+import com.ims.inventory_management_system_backend.entities.order_return.OrderReturn;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

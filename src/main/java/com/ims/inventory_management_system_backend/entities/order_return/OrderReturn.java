@@ -1,9 +1,8 @@
-package com.ims.inventory_management_system_backend.entities.returns;
+package com.ims.inventory_management_system_backend.entities.order_return;
 
 import com.ims.inventory_management_system_backend.entities.customers.Customer;
+import com.ims.inventory_management_system_backend.entities.order_return_items.OrderReturnItems;
 import com.ims.inventory_management_system_backend.entities.orders.Orders;
-import com.ims.inventory_management_system_backend.entities.purchase.Purchase;
-import com.ims.inventory_management_system_backend.entities.supplier.Supplier;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,28 +14,28 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "purchase_return")
+@Table(name = "order_returns")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PurchaseReturn {
+public class OrderReturn {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "supplier_id")
-    private Supplier supplier;
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     @ManyToOne
-    @JoinColumn(name = "purchase_id")
-    private Purchase purchase;
+    @JoinColumn(name = "order_id")
+    private Orders orders;
 
-    @OneToMany(mappedBy = "purchaseReturn", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PurchaseReturnItems> purchaseReturnItems;
+    @OneToMany(mappedBy = "orderReturn", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    private List<OrderReturnItems> orderReturnItems;
 
-    @Column(name = "return_date",nullable = false, updatable = false)
+    @Column(name = "return_date",nullable = false)
     @CreationTimestamp
     private LocalDateTime returnDate;
 
@@ -46,6 +45,6 @@ public class PurchaseReturn {
     @Column(name = "status", nullable = false)
     private String status;
 
-    @Column(name = "sub_total", nullable = false)
-    private Double subTotal;
+    @Column(name = "refund_amount", nullable = false)
+    private Double refundAmount;
 }
