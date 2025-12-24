@@ -3,6 +3,7 @@ package com.ims.inventory_management_system_backend.entities.customers;
 import com.ims.inventory_management_system_backend.entities.address.Address;
 import com.ims.inventory_management_system_backend.entities.orders.Orders;
 import com.ims.inventory_management_system_backend.entities.orders.OrderReturn;
+import com.ims.inventory_management_system_backend.entities.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,9 +35,6 @@ public class Customer {
     @Column(name="last_name", nullable = false)
     private String lastName;
 
-    @Column(name="email", nullable = false, unique = true)
-    private String email;
-
     @Column(name="phone_number", nullable = false, unique = true)
     private String phoneNumber;
 
@@ -50,6 +48,10 @@ public class Customer {
     @Column(updatable = true)
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @OneToOne(optional = false)
+    @JoinColumn(name = "user_id", unique = true, nullable = false)
+    private User user;
 
     @OneToMany(mappedBy="customer")
     private List<Orders> orders;
