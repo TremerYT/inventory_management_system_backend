@@ -1,4 +1,4 @@
-package com.ims.inventory_management_system_backend.entities.user;
+package com.ims.inventory_management_system_backend.entities.role;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

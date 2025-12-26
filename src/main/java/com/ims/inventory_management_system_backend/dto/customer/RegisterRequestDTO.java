@@ -4,8 +4,10 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
-public class CustomerRequestDTO {
+@Data
+public class RegisterRequestDTO {
     @NotBlank(message = "First Name is required")
     @Size(min = 2, max = 50, message = "First Name must be between 2 and 50 Characters")
     private String firstName;
@@ -17,6 +19,9 @@ public class CustomerRequestDTO {
     @Email(message = "Email must be valid")
     @NotBlank(message = "Email is required")
     private String email;
+
+    @NotBlank(message = "Password is required")
+    private String password;
 
     @NotBlank(message = "Phone number is required")
     @Pattern(regexp = "^(?:\\+254|254|0)(7\\d{8}|1\\d{8})$", message = "Invalid Kenyan Phone number")
