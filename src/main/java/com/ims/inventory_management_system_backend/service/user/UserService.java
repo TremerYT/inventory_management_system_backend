@@ -1,6 +1,6 @@
 package com.ims.inventory_management_system_backend.service.user;
 
-import com.ims.inventory_management_system_backend.dto.customer.RegisterRequestDTO;
+import com.ims.inventory_management_system_backend.dto.register.RegisterRequestDTO;
 import com.ims.inventory_management_system_backend.entities.customers.Customer;
 import com.ims.inventory_management_system_backend.entities.role.Role;
 import com.ims.inventory_management_system_backend.entities.role.RoleName;
@@ -8,7 +8,6 @@ import com.ims.inventory_management_system_backend.entities.user.User;
 import com.ims.inventory_management_system_backend.repository.customer.CustomerRepository;
 import com.ims.inventory_management_system_backend.repository.role.RoleRepository;
 import com.ims.inventory_management_system_backend.repository.user.UserRepository;
-
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -54,23 +53,26 @@ public class UserService implements UserDetailsService {
       throw new RuntimeException("Email already in use");
     }
 
-    User newUser = new User();
-    newUser.setEmail(dto.getEmail());
-    newUser.setPassword(passwordEncoder.encode(dto.getPassword()));
     Role customRole = roleRepository
             .findByName(RoleName.ROLE_CUSTOMER)
             .orElseThrow(() -> new RuntimeException("Default Role not set"));
-    newUser.setRoles(new HashSet<>(Set.of(customRole)));
+
+    User newUser = User
+            .builder()
+            .email(dto.getEmail())
+            .password(passwordEncoder.encode(dto.getPassword()))
+            .roles(new HashSet<>(Set.of(customRole)))
+            .build();
     userRepository.save(newUser);
 
-    Customer newCustomer = new Customer();
-
-    newCustomer.setCustomerCode("CUST-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
-    newCustomer.setFirstName(dto.getFirstName());
-    newCustomer.setLastName(dto.getLastName());
-    newCustomer.setPhoneNumber(dto.getPhoneNumber());
-    newCustomer.setUser(newUser);
-
+    Customer newCustomer = Customer
+            .builder()
+            .customerCode("CUST-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase())
+            .firstName(dto.getFirstName())
+            .lastName(dto.getLastName())
+            .phoneNumber(dto.getPhoneNumber())
+            .user(newUser)
+            .build();
     customerRepository.save(newCustomer);
   }
 }

@@ -1,4 +1,4 @@
-package com.ims.inventory_management_system_backend.dto.customer;
+package com.ims.inventory_management_system_backend.dto.register;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
