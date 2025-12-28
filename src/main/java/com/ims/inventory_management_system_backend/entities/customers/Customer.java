@@ -37,7 +37,8 @@ public class Customer {
     private String phoneNumber;
 
     @Column(name="is_active", nullable = false)
-    private Boolean isActive;
+    @Builder.Default
+    private Boolean isActive = true;
 
     @Column(updatable = false)
     @CreationTimestamp
