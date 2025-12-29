@@ -1,6 +1,8 @@
 package com.ims.inventory_management_system_backend.controller.auth;
 
+import com.ims.inventory_management_system_backend.dto.login.LoginRequestDTO;
 import com.ims.inventory_management_system_backend.dto.register.RegisterRequestDTO;
+import com.ims.inventory_management_system_backend.dto.token.TokenPair;
 import com.ims.inventory_management_system_backend.service.auth.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,5 +23,11 @@ public class AuthController {
     public ResponseEntity<String> registerUser(@Valid @RequestBody RegisterRequestDTO registerRequest) {
         authService.registerUser(registerRequest);
         return new ResponseEntity<>("Customer created Successfully", HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginRequestDTO loginRequest){
+        TokenPair tokenPair = authService.loginUser(loginRequest);
+        return ResponseEntity.ok(tokenPair);
     }
 }

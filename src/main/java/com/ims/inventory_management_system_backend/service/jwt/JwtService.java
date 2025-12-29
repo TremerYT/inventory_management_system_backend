@@ -1,9 +1,12 @@
 package com.ims.inventory_management_system_backend.service.jwt;
 
-import io.jsonwebtoken.*;
+import com.ims.inventory_management_system_backend.dto.token.TokenPair;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -28,87 +31,85 @@ public class JwtService {
     @Value("${jwt.refresh_expiration}")
     private long refreshExpiration;
 
-    private static final String TOKEN_PREFIX = "Bearer ";
-
-    private String generateToken(Authentication authentication, long expirationTime, Map<String, String> claims) {
+    private String generateToken(
+            Authentication authentication,
+            long expirationTime,
+            Map<String, Object> claims
+    ) {
         UserDetails userprincipal = (UserDetails) authentication.getPrincipal();
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + expirationTime);
 
         return Jwts.builder()
                 .setSubject(userprincipal.getUsername())
                 .setIssuedAt(now)
-                .setClaims(claims)
-                .setExpiration(expiryDate)
-                .signWith(getSignInKey())
+                .setExpiration(new Date(now.getTime() + expirationTime))
+                .addClaims(claims)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String generateAccessToken (Authentication authentication) {
+    public String generateAccessToken(Authentication authentication) {
         return generateToken(authentication, expiryTime, new HashMap<>());
     }
 
-    public String genareteRefreshToken(Authentication authentication) {
-        Map<String, String> claims = new HashMap<>();
-        claims.put("tokenType", "refreshToken");
+    public String genereteRefreshToken(Authentication authentication) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("tokenType", "refresh");
 
         return generateToken(authentication, refreshExpiration, claims);
     }
 
-    public Boolean validateAccessToken (String token, UserDetails userDetails) {
-        final String username = extractUserName(token);
+    public TokenPair generateTokenPair(Authentication authentication) {
+        return new TokenPair(
+                generateAccessToken(authentication),
+                genereteRefreshToken(authentication)
+        );
+    }
 
-        if (!username.equals(userDetails.getUsername())){
+
+    public Boolean isTokenValid(String token) {
+        try {
+            parseToken(token);
+            return true;
+        } catch (JwtException e) {
+            log.debug("Invalid JWT: {}", e.getMessage());
             return false;
         }
+    }
 
+    public boolean isTokenValidForUser(String token, UserDetails userDetails) {
         try {
-            Jwts.parserBuilder()
-                    .setSigningKey(getSignInKey())
-                    .build()
-                    .parseClaimsJwt(token);
-            return true;
-        } catch (ExpiredJwtException e){
-            log.error("JWT token is expired: {}", e.getMessage());
-        } catch (UnsupportedJwtException e) {
-            log.error("JWT token is unsupported: {}", e.getMessage());
-        } catch (MalformedJwtException e) {
-            log.error("JWT is Malformed: {}", e.getMessage());
-        } catch (IllegalArgumentException e) {
-            log.error("JWT claims is empty: {}", e.getMessage());
-        } catch (SignatureException e){
-            log.error("Invalid Jwt Signature");
+            Claims claims = parseToken(token);
+            return claims.getSubject().equals(userDetails.getUsername())
+                    && !claims.getExpiration().before(new Date());
+        } catch (JwtException e) {
+            return false;
         }
-
-        return false;
     }
 
-    public Boolean isRefreshToken (String token) {
-        final String tokenType = extractTokenType(token);
-        return "refreshToken".equals(tokenType);
-    }
-
-    private <T> T extractClaim (String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
-    }
-
-    private Claims extractAllClaims(String token) {
+    private Claims parseToken(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getSignInKey())
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
 
-    public String extractUserName (String token) {
+    public Boolean isRefreshToken(String token) {
+        return "refresh".equals(
+                extractClaim(token, c -> c.get("tokenType", String.class))
+        );
+    }
+
+    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        return claimsResolver.apply(parseToken(token));
+    }
+
+    public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    private String extractTokenType (String token){
-        return extractClaim(token, claims -> claims.get("tokenType", String.class));
-    }
-    private Key getSignInKey() {
+    private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
