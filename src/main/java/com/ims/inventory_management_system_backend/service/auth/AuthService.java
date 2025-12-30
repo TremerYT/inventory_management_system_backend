@@ -2,6 +2,7 @@ package com.ims.inventory_management_system_backend.service.auth;
 
 import com.ims.inventory_management_system_backend.dto.login.LoginRequestDTO;
 import com.ims.inventory_management_system_backend.dto.register.RegisterRequestDTO;
+import com.ims.inventory_management_system_backend.dto.token.RefreshTokenRequest;
 import com.ims.inventory_management_system_backend.dto.token.TokenPair;
 import com.ims.inventory_management_system_backend.entities.customers.Customer;
 import com.ims.inventory_management_system_backend.entities.role.Role;
@@ -12,6 +13,7 @@ import com.ims.inventory_management_system_backend.repository.role.RoleRepositor
 import com.ims.inventory_management_system_backend.repository.user.UserRepository;
 import com.ims.inventory_management_system_backend.service.jwt.JwtService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
