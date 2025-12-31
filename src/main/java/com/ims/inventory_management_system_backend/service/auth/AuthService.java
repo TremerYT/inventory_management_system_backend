@@ -12,6 +12,7 @@ import com.ims.inventory_management_system_backend.repository.customer.CustomerR
 import com.ims.inventory_management_system_backend.repository.role.RoleRepository;
 import com.ims.inventory_management_system_backend.repository.user.UserRepository;
 import com.ims.inventory_management_system_backend.service.jwt.JwtService;
+import com.ims.inventory_management_system_backend.service.user.CustomUserDetailsService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +37,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final CustomUserDetailsService userDetailsService;
 
     @Transactional
     public void registerUser(RegisterRequestDTO dto){
@@ -76,5 +79,28 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return jwtService.generateTokenPair(authentication);
+    }
+
+    public TokenPair refreshToken(@Valid RefreshTokenRequest request) {
+
+        String refreshToken = request.getRefreshToken();
+
+        if (jwtService.isRefreshToken(refreshToken)){
+            throw new IllegalArgumentException("Invalid refresh token");
+        }
+
+        String user = jwtService.extractUserName(refreshToken);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user);
+
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
+        String accessToken = jwtService.generateAccessToken(authenticationToken);
+        return new TokenPair(accessToken, refreshToken);
+
+
     }
 }
