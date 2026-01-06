@@ -1,6 +1,5 @@
 package com.ims.inventory_management_system_backend.dto.login;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
