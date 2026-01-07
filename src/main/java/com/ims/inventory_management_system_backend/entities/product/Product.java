@@ -4,10 +4,7 @@ import com.ims.inventory_management_system_backend.entities.category.Category;
 import com.ims.inventory_management_system_backend.entities.orders.OrderItems;
 import com.ims.inventory_management_system_backend.entities.purchase.PurchaseItems;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -20,6 +17,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,13 +46,13 @@ public class Product {
     private Double price;
 
     @Column(name = "discount_type", nullable = false)
-    private Double discountType;
+    private String discountType;
 
     @Column(name = "discount_value", nullable = false)
     private Double discountValue;
 
-    @Column(name = "product_image", nullable = false)
-    private String productImage;
+    @Column(name = "product_images", nullable = false)
+    private List<String> productImages;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
