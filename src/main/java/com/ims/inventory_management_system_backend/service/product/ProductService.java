@@ -45,26 +45,14 @@ public class ProductService {
                 .toList();
     }
 
-    private ProductResponseDTO mapToResponse(Product product) {
-        ProductResponseDTO dto = new ProductResponseDTO();
-        dto.setSkuNumber(product.getSkuNumber());
-        dto.setProductName(product.getProductName());
-        dto.setBrand(product.getBrand());
-        dto.setDescription(product.getDescription());
-        dto.setQuantity(product.getQuantity());
-        dto.setPrice(product.getPrice());
-        dto.setDiscountType(product.getDiscountType());
-        dto.setDiscountValue(product.getDiscountValue());
-        dto.setProductImages(product.getProductImages());
-        dto.setCategoryName(product.getCategory().getCategoryName());
-        return dto;
+    public ProductResponseDTO getProductById(Long id) {
+        Product product = productRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Product does not exist"));
+        return mapToResponse(product);
     }
 
-    public Product getProduct(Long id) {
-        return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product does not exist"));
-    }
-
-    public Product updateProduct(Long id, ProductRequestDTO request) {
+    public ProductResponseDTO updateProduct(Long id, ProductRequestDTO request) {
         Category category = categoryRepository
                 .findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
@@ -81,10 +69,30 @@ public class ProductService {
         product.setDiscountType(request.getDiscountType());
         product.setDiscountValue(request.getDiscountValue());
         product.setProductImages(request.getProductImages());
-        return productRepository.save(product);
+        Product updatedProduct = productRepository.save(product);
+
+        return mapToResponse(updatedProduct);
     }
 
     public void delete (Long id){
+        if (!productRepository.existsById(id)){
+            throw new RuntimeException("Product Not found");
+        }
         productRepository.deleteById(id);
+    }
+
+    private ProductResponseDTO mapToResponse(Product product) {
+        ProductResponseDTO dto = new ProductResponseDTO();
+        dto.setSkuNumber(product.getSkuNumber());
+        dto.setProductName(product.getProductName());
+        dto.setBrand(product.getBrand());
+        dto.setDescription(product.getDescription());
+        dto.setQuantity(product.getQuantity());
+        dto.setPrice(product.getPrice());
+        dto.setDiscountType(product.getDiscountType());
+        dto.setDiscountValue(product.getDiscountValue());
+        dto.setProductImages(product.getProductImages());
+        dto.setCategoryName(product.getCategory().getCategoryName());
+        return dto;
     }
 }
