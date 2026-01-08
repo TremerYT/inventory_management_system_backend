@@ -17,7 +17,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
-    public Product createProduct (ProductRequestDTO request) {
+    public ProductResponseDTO createProduct (ProductRequestDTO request) {
         Category category = categoryRepository
                 .findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
@@ -33,8 +33,8 @@ public class ProductService {
                 .discountType(request.getDiscountType())
                 .discountValue(request.getDiscountValue())
                 .build();
-
-        return productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+        return mapToResponse(savedProduct);
     }
 
     public List<ProductResponseDTO> getAllProducts () {

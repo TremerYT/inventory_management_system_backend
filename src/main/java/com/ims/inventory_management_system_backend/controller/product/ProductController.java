@@ -3,6 +3,7 @@ package com.ims.inventory_management_system_backend.controller.product;
 import com.ims.inventory_management_system_backend.dto.product.ProductRequestDTO;
 import com.ims.inventory_management_system_backend.dto.product.ProductResponseDTO;
 import com.ims.inventory_management_system_backend.service.product.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,10 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/create")
-    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductRequestDTO productRequest) {
+    public ResponseEntity<ProductResponseDTO> createProduct(@Valid @RequestBody ProductRequestDTO productRequest) {
         ProductResponseDTO createdProduct = productService.createProduct(productRequest);
         return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
     }
+
+    @
 }
