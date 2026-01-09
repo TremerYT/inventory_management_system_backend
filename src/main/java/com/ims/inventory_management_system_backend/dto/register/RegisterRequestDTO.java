@@ -20,6 +20,9 @@ public class RegisterRequestDTO {
     @NotBlank(message = "Email is required")
     private String email;
 
+    @NotBlank(message = "Email is required")
+    private String userName;
+
     @NotBlank(message = "Password is required")
     private String password;
 

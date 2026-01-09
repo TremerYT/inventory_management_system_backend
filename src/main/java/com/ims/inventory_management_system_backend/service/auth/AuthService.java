@@ -41,8 +41,8 @@ public class AuthService {
 
     @Transactional
     public void registerUser(RegisterRequestDTO dto){
-        if (userRepository.existsByEmail((dto.getEmail()))) {
-            throw new RuntimeException("Email already in use");
+        if (userRepository.existsByUserName(dto.getUserName())) {
+            throw new RuntimeException("Username already in use");
         }
 
         Role customRole = roleRepository
@@ -51,7 +51,7 @@ public class AuthService {
 
         User newUser = User
                 .builder()
-                .email(dto.getEmail())
+                .userName(dto.getUserName())
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .roles(new HashSet<>(Set.of(customRole)))
                 .build();
@@ -62,6 +62,7 @@ public class AuthService {
                 .customerCode("CUST-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase())
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
+                .userName(dto.getUserName())
                 .phoneNumber(dto.getPhoneNumber())
                 .user(newUser)
                 .build();
@@ -71,7 +72,7 @@ public class AuthService {
     public TokenPair loginUser (LoginRequestDTO dto){
         Authentication authentication = authenticationManager.authenticate(
                new UsernamePasswordAuthenticationToken(
-                       dto.getEmail(),
+                       dto.getUserName(),
                        dto.getPassword()
                )
         );
