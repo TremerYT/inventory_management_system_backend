@@ -54,6 +54,9 @@ public class Product {
     @Column(name = "unit_price", nullable = false)
     private Double unitPrice;
 
+    @Column(name = "min_stock", nullable = false)
+    private Integer minStock;
+
     @Column(name = "discount_type", nullable = false)
     private String discountType;
 
@@ -63,7 +66,7 @@ public class Product {
     @Column(name = "main_image", nullable = false)
     private String mainImage;
 
-    @Column(name = "product_images", nullable = false)
+    @Column(name = "product_images")
     private List<String> galleryImages;
 
     @Column(name = "created_at", nullable = false, updatable = false)
