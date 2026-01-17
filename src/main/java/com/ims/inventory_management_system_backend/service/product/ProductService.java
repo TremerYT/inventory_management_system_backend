@@ -48,12 +48,20 @@ public class ProductService {
         return mapToResponse(product);
     }
 
-    public List<Product> getLowStockProducts() {
-        return productRepository.findLowStockProducts();
+    public List<ProductResponseDTO> getLowStockProducts() {
+        return productRepository
+                .findLowStockProducts()
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
     }
 
-    public List<Product> getOutOfStockProducts() {
-        return productRepository.findOutOfStockProducts();
+    public List<ProductResponseDTO> getOutOfStockProducts() {
+        return productRepository
+                .findOutOfStockProducts()
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
     }
 
     public long getLowStockCount() {

@@ -2,7 +2,7 @@ package com.ims.inventory_management_system_backend.controller.product;
 
 import com.ims.inventory_management_system_backend.dto.product.ProductRequestDTO;
 import com.ims.inventory_management_system_backend.dto.product.ProductResponseDTO;
-import com.ims.inventory_management_system_backend.entities.product.Product;
+import com.ims.inventory_management_system_backend.dto.stock.StockResponseDTO;
 import com.ims.inventory_management_system_backend.service.product.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +27,24 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<List<ProductResponseDTO>> getAllProducts() {
         return ResponseEntity.ok(productService.getAllProducts());
+    }
+
+    @GetMapping("/low-stock")
+    public ResponseEntity<List<ProductResponseDTO>> getLowStockProducts() {
+        return ResponseEntity.ok(productService.getLowStockProducts());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ProductResponseDTO>> getOutOfStockProducts() {
+        return ResponseEntity.ok(productService.getOutOfStockProducts());
+    }
+
+    @GetMapping("/summary")
+    public StockResponseDTO summary() {
+        return new StockResponseDTO(
+                productService.getLowStockCount(),
+                productService.getOutOfStockCount()
+        );
     }
 
     @GetMapping("/{id}")
