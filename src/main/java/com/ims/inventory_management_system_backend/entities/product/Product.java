@@ -26,6 +26,9 @@ public class Product {
     @Column(name = "sku_number", nullable = false, unique = true, length = 30)
     private String skuNumber;
 
+    @Column(name = "barcode_number", nullable = false, unique = true)
+    private String barcodeNumber;
+
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
@@ -36,14 +39,20 @@ public class Product {
     @Column(name = "brand", unique = true, nullable = false)
     private String brand;
 
+    @Column(name = "unit", nullable = false, unique = false)
+    private String productUnit;
+
     @Column(name = "description", nullable = false)
     private String description;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @Column(name = "price", nullable = false)
-    private Double price;
+    @Column(name = "cost_price", nullable = false)
+    private Double costPrice;
+
+    @Column(name = "unit_price", nullable = false)
+    private Double unitPrice;
 
     @Column(name = "discount_type", nullable = false)
     private String discountType;
@@ -51,8 +60,11 @@ public class Product {
     @Column(name = "discount_value", nullable = false)
     private Double discountValue;
 
+    @Column(name = "main_image", nullable = false)
+    private String mainImage;
+
     @Column(name = "product_images", nullable = false)
-    private List<String> productImages;
+    private List<String> galleryImages;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
