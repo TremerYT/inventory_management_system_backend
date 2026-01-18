@@ -34,7 +34,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.getLowStockProducts());
     }
 
-    @GetMapping
+    @GetMapping("/out-of-stock")
     public ResponseEntity<List<ProductResponseDTO>> getOutOfStockProducts() {
         return ResponseEntity.ok(productService.getOutOfStockProducts());
     }
