@@ -14,6 +14,7 @@ public class ProductResponseDTO {
     private Integer quantity;
     private Double costPrice;
     private Double unitPrice;
+    private String unit;
     private Integer minStock;
     private String discountType;
     private Double discountValue;

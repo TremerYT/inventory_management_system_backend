@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 public class ProductRequestDTO {
+
     @NotBlank(message = "Sku Number is Required")
     private String skuNumber;
 
@@ -24,27 +25,27 @@ public class ProductRequestDTO {
     private String brand;
 
     @NotBlank(message = "Unit is required")
-    private String productUnit;
+    private String unit;
 
     @NotBlank(message = "Description is Required")
     private String description;
 
-    @NotBlank(message = "Quantity is Required")
+    @NotNull(message = "Quantity is required")
     private Integer quantity;
 
-    @NotBlank(message = "Cost price is required")
+    @NotNull(message = "Cost price is required")
     private Double costPrice;
 
-    @NotBlank(message = "unit price is required")
+    @NotNull(message = "Unit price is required")
     private Double unitPrice;
 
-    @NotBlank(message = "Minimum Stock is Required")
+    @NotNull(message = "Minimum Stock is Required")
     private Integer minStock;
 
     @NotBlank(message = "Discount Type is Required")
     private String discountType;
 
-    @NotBlank(message = "Discount value is required")
+    @NotNull(message = "Discount value is required")
     private Double discountValue;
 
     @NotBlank(message = "Product image is required")

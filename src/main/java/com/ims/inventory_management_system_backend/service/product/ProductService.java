@@ -99,6 +99,7 @@ public class ProductService {
         dto.setBrand(product.getBrand());
         dto.setDescription(product.getDescription());
         dto.setQuantity(product.getQuantity());
+        dto.setUnit(product.getUnit());
         dto.setMinStock(product.getMinStock());
         dto.setCostPrice(product.getCostPrice());
         dto.setUnitPrice(product.getUnitPrice());
@@ -117,6 +118,7 @@ public class ProductService {
         product.setBrand(request.getBrand());
         product.setDescription(request.getDescription());
         product.setQuantity(request.getQuantity());
+        product.setUnit(request.getUnit());
         product.setMinStock(request.getMinStock());
         product.setCostPrice(request.getCostPrice());
         product.setUnitPrice(request.getUnitPrice());

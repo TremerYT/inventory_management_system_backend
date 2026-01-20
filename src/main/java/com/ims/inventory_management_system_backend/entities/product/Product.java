@@ -40,7 +40,7 @@ public class Product {
     private String brand;
 
     @Column(name = "unit", nullable = false, unique = false)
-    private String productUnit;
+    private String unit;
 
     @Column(name = "description", nullable = false)
     private String description;

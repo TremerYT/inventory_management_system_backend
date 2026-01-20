@@ -13,13 +13,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/product")
+@RequestMapping("/api/products")
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/create")
     public ResponseEntity<ProductResponseDTO> createProduct(@Valid @RequestBody ProductRequestDTO productRequest) {
+        System.out.println("HIT CREATE PRODUCT");
         ProductResponseDTO createdProduct = productService.createProduct(productRequest);
         return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
     }

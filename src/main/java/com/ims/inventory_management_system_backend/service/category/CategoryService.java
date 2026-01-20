@@ -53,6 +53,7 @@ public class CategoryService {
 
     private CategoryResponseDTO mapToResponse(Category savedCategory) {
         CategoryResponseDTO responseDTO = new CategoryResponseDTO();
+        responseDTO.setId(savedCategory.getId());
         responseDTO.setCategoryCode(savedCategory.getCategoryCode());
         responseDTO.setCategoryName(savedCategory.getCategoryName());
         responseDTO.setIsActive(savedCategory.getIsActive());
