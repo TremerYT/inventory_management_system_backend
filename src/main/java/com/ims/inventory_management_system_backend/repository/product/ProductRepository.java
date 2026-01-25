@@ -3,6 +3,7 @@ package com.ims.inventory_management_system_backend.repository.product;
 import com.ims.inventory_management_system_backend.entities.product.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -18,4 +19,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT COUNT(p) FROM Product p WHERE p.quantity = 0")
     Long countOutOfStockProducts();
+
+    @Query("SELECT p FROM Product p WHERE LOWER(p.productName) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(p.skuNumber) LIKE LOWER(CONCAT('%', :query, '%'))")
+    List<Product> searchProducts(@Param("query") String query);
 }

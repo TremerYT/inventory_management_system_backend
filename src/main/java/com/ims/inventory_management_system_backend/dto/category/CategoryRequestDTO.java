@@ -11,6 +11,9 @@ public class CategoryRequestDTO {
     @NotBlank(message = "Category name is required")
     private String categoryName;
 
+    @NotBlank(message = "Category image is required")
+    private String categoryImage;
+
     @NotNull
     private Boolean isActive;
 }

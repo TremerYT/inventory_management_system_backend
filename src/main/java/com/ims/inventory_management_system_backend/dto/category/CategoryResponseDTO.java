@@ -11,6 +11,7 @@ public class CategoryResponseDTO {
     private Long id;
     private String categoryCode;
     private String categoryName;
+    private String categoryImage;
     private Boolean isActive;
     private LocalDateTime createdAt;
 }

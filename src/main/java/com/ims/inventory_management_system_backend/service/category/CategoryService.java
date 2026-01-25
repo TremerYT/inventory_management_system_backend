@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -56,6 +55,7 @@ public class CategoryService {
         responseDTO.setId(savedCategory.getId());
         responseDTO.setCategoryCode(savedCategory.getCategoryCode());
         responseDTO.setCategoryName(savedCategory.getCategoryName());
+        responseDTO.setCategoryImage(savedCategory.getCategoryImage());
         responseDTO.setIsActive(savedCategory.getIsActive());
         responseDTO.setCreatedAt(savedCategory.getCreatedAt());
         return responseDTO;
@@ -63,6 +63,7 @@ public class CategoryService {
 
     private void mapRequestToCategory(CategoryRequestDTO request, Category newCategory) {
         newCategory.setCategoryName(request.getCategoryName());
+        newCategory.setCategoryImage(request.getCategoryImage());
         newCategory.setIsActive(request.getIsActive());
     }
 }

@@ -48,6 +48,15 @@ public class ProductService {
         return mapToResponse(product);
     }
 
+    public List<ProductResponseDTO> searchProducts(String query) {
+        return productRepository
+                .searchProducts(query)
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+
     public List<ProductResponseDTO> getLowStockProducts() {
         return productRepository
                 .findLowStockProducts()
