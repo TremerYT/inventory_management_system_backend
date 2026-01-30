@@ -102,6 +102,7 @@ public class ProductService {
 
     private ProductResponseDTO mapToResponse(Product product) {
         ProductResponseDTO dto = new ProductResponseDTO();
+        dto.setId(product.getId());
         dto.setSkuNumber(product.getSkuNumber());
         dto.setBarcodeNumber(product.getBarcodeNumber());
         dto.setProductName(product.getProductName());

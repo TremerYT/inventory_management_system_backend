@@ -37,16 +37,23 @@ public class CategoryService {
                 .toList();
     }
 
+    public CategoryResponseDTO getCategoryById(Long id) {
+        Category category = categoryRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Category does not exist"));
+        return mapToResponse(category);
+    }
+
     public CategoryResponseDTO updateCategory(Long id, CategoryRequestDTO request) {
         Category category = categoryRepository
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
         mapRequestToCategory(request, category);
         Category updatedCategory = categoryRepository.save(category);
-        return  mapToResponse(updatedCategory);
+        return mapToResponse(updatedCategory);
     }
 
-    public  void deleteCategory(Long id) {
+    public void deleteCategory(Long id) {
         categoryRepository.deleteById(id);
     }
 

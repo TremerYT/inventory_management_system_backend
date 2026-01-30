@@ -6,6 +6,7 @@ import java.util.List;
 
 @Data
 public class ProductResponseDTO {
+    private Long id;
     private String skuNumber;
     private String barcodeNumber;
     private String productName;

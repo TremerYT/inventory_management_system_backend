@@ -23,6 +23,11 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getCategories());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryResponseDTO> getProductById (@PathVariable Long id) {
+        return ResponseEntity.ok(categoryService.getCategoryById(id));
+    }
+
     @PostMapping("/create")
     public ResponseEntity<CategoryResponseDTO> createCategory(@Valid @RequestBody CategoryRequestDTO request){
         CategoryResponseDTO category = categoryService.createCategory(request);
