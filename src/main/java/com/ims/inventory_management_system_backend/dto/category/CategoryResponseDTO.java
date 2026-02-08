@@ -1,6 +1,5 @@
 package com.ims.inventory_management_system_backend.dto.category;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDateTime;

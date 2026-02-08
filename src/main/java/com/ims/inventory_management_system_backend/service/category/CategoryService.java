@@ -54,6 +54,13 @@ public class CategoryService {
     }
 
     public void deleteCategory(Long id) {
+        Category category = categoryRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        if (!category.getProducts().isEmpty()) {
+            throw new RuntimeException("Cannot delete category with existing products");
+        }
         categoryRepository.deleteById(id);
     }
 

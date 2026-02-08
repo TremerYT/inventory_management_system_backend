@@ -1,5 +1,6 @@
 package com.ims.inventory_management_system_backend.entities.product;
 
+import com.ims.inventory_management_system_backend.entities.brands.Brand;
 import com.ims.inventory_management_system_backend.entities.category.Category;
 import com.ims.inventory_management_system_backend.entities.orders.OrderItems;
 import com.ims.inventory_management_system_backend.entities.purchase.PurchaseItems;
@@ -33,13 +34,14 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @ManyToOne
+    @JoinColumn(name = "brand_id", nullable = false)
+    private Brand brand;
+
     @Column(name = "product_name", unique = true, nullable = false)
     private String productName;
 
-    @Column(name = "brand", unique = true, nullable = false)
-    private String brand;
-
-    @Column(name = "unit", nullable = false, unique = false)
+    @Column(name = "unit", nullable = false)
     private String unit;
 
     @Column(name = "description", nullable = false)
