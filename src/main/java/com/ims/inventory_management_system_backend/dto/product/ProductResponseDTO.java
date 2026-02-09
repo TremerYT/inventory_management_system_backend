@@ -10,7 +10,7 @@ public class ProductResponseDTO {
     private String skuNumber;
     private String barcodeNumber;
     private String productName;
-    private String brand;
+    private String brandName;
     private String description;
     private Integer quantity;
     private Double costPrice;

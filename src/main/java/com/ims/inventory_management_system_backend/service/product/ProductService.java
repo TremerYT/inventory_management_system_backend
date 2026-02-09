@@ -2,8 +2,10 @@ package com.ims.inventory_management_system_backend.service.product;
 
 import com.ims.inventory_management_system_backend.dto.product.ProductRequestDTO;
 import com.ims.inventory_management_system_backend.dto.product.ProductResponseDTO;
+import com.ims.inventory_management_system_backend.entities.brands.Brand;
 import com.ims.inventory_management_system_backend.entities.category.Category;
 import com.ims.inventory_management_system_backend.entities.product.Product;
+import com.ims.inventory_management_system_backend.repository.brand.BrandRepository;
 import com.ims.inventory_management_system_backend.repository.category.CategoryRepository;
 import com.ims.inventory_management_system_backend.repository.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import java.util.List;
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final BrandRepository brandRepository;
 
     public Category getCategory (Long categoryId) {
         return categoryRepository
@@ -23,11 +26,18 @@ public class ProductService {
                 .orElseThrow(() -> new RuntimeException("Category not found"));
     }
 
+    public Brand getBrand (Long brandId) {
+        return brandRepository
+                .findById(brandId)
+                .orElseThrow(() -> new RuntimeException("Brand not found"));
+    }
+
     public ProductResponseDTO createProduct (ProductRequestDTO request) {
         Category category = getCategory(request.getCategoryId());
+        Brand brand = getBrand(request.getBrandId());
 
         Product newProduct = new  Product();
-        mapRequestToProduct(request, newProduct, category);
+        mapRequestToProduct(request, newProduct, category, brand);
 
         Product savedProduct = productRepository.save(newProduct);
         return mapToResponse(savedProduct);
@@ -83,11 +93,12 @@ public class ProductService {
 
     public ProductResponseDTO updateProduct(Long id, ProductRequestDTO request) {
         Category category = getCategory(request.getCategoryId());
+        Brand brand = getBrand(request.getBrandId());
 
         Product product = productRepository
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not Found"));
-        mapRequestToProduct(request, product, category);
+        mapRequestToProduct(request, product, category, brand);
 
         Product updatedProduct = productRepository.save(product);
         return mapToResponse(updatedProduct);
@@ -106,7 +117,7 @@ public class ProductService {
         dto.setSkuNumber(product.getSkuNumber());
         dto.setBarcodeNumber(product.getBarcodeNumber());
         dto.setProductName(product.getProductName());
-        dto.setBrand(product.getBrand());
+        dto.setBrandName(product.getBrand().getBrandName());
         dto.setDescription(product.getDescription());
         dto.setQuantity(product.getQuantity());
         dto.setUnit(product.getUnit());
@@ -121,11 +132,11 @@ public class ProductService {
         return dto;
     }
 
-    private void mapRequestToProduct(ProductRequestDTO request, Product product, Category category) {
+    private void mapRequestToProduct(ProductRequestDTO request, Product product, Category category, Brand brand) {
         product.setSkuNumber(request.getSkuNumber());
         product.setBarcodeNumber(request.getBarcodeNumber());
         product.setProductName(request.getProductName());
-        product.setBrand(request.getBrand());
+        product.setBrand(brand);
         product.setDescription(request.getDescription());
         product.setQuantity(request.getQuantity());
         product.setUnit(request.getUnit());
