@@ -34,7 +34,7 @@ public class Brand {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
 
-    @OneToMany(mappedBy = "brands")
+    @OneToMany(mappedBy = "brand")
     private List<Product> products;
 
     @Column(name = "created_at", nullable = false, updatable = false)
