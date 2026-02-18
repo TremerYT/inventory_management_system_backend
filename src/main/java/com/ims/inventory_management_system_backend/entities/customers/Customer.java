@@ -1,8 +1,7 @@
 package com.ims.inventory_management_system_backend.entities.customers;
 
 import com.ims.inventory_management_system_backend.entities.address.Address;
-import com.ims.inventory_management_system_backend.entities.orders.Orders;
-import com.ims.inventory_management_system_backend.entities.orders.OrderReturn;
+import com.ims.inventory_management_system_backend.entities.sale.Sales;
 import com.ims.inventory_management_system_backend.entities.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -56,11 +55,8 @@ public class Customer {
     private User user;
 
     @OneToMany(mappedBy="customer")
-    private List<Orders> orders;
+    private List<Sales> sales;
 
     @OneToMany(mappedBy="customer", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Address> addresses;
-
-    @OneToMany(mappedBy="customer")
-    private List<OrderReturn> orderReturns;
 }
