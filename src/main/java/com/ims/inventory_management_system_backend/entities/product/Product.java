@@ -2,8 +2,8 @@ package com.ims.inventory_management_system_backend.entities.product;
 
 import com.ims.inventory_management_system_backend.entities.brands.Brand;
 import com.ims.inventory_management_system_backend.entities.category.Category;
-import com.ims.inventory_management_system_backend.entities.orders.OrderItems;
 import com.ims.inventory_management_system_backend.entities.purchase.PurchaseItems;
+import com.ims.inventory_management_system_backend.entities.sale.SaleItems;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -80,7 +80,7 @@ public class Product {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "product")
-    private List<OrderItems> orderItems;
+    private List<SaleItems> saleItems;
 
     @OneToMany(mappedBy = "product")
     private List<PurchaseItems> purchaseItems;
