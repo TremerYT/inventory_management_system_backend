@@ -12,7 +12,7 @@ public class SaleRequestDTO {
     @NotBlank(message = "Reference number is required")
     public String referenceNumber;
 
-    @NotBlank(message = "Date is required")
+    @NotNull(message = "Date is required")
     public LocalDate date;
 
     @NotNull(message = "Customer name is required")
