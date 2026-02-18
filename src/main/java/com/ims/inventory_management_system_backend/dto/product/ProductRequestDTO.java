@@ -22,7 +22,7 @@ public class ProductRequestDTO {
     @NotNull(message = "Category is required")
     private Long categoryId;
 
-    @NotBlank(message = "Brand is required")
+    @NotNull(message = "Brand is required")
     private Long brandId;
 
     @NotBlank(message = "Unit is required")
