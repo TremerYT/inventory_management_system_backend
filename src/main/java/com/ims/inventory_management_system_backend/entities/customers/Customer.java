@@ -1,8 +1,6 @@
 package com.ims.inventory_management_system_backend.entities.customers;
 
-import com.ims.inventory_management_system_backend.entities.address.Address;
 import com.ims.inventory_management_system_backend.entities.sale.Sales;
-import com.ims.inventory_management_system_backend.entities.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -32,11 +30,30 @@ public class Customer {
     @Column(name="last_name", nullable = false)
     private String lastName;
 
-    @Column(name="email", nullable = false, unique = true)
+    @Column(name = "customer_category", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CustomerCategory customerCategory;
+
+    @Column(name="email", nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(name="phone_number", nullable = false, unique = true)
+    @Column(name="phone_number", nullable = false, unique = true, length = 20)
     private String phoneNumber;
+
+    @Column(name="country", nullable = false)
+    private String country;
+
+    @Column(name="city", nullable = false)
+    private String city;
+
+    @Column(name="zip_code", nullable = false)
+    private String zipCode;
+
+    @Column(name="reward_points", nullable = false)
+    private Integer rewardPoints;
+
+    @Column(name="address", nullable = false)
+    private String address;
 
     @Column(name="is_active", nullable = false)
     @Builder.Default
@@ -46,17 +63,10 @@ public class Customer {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(updatable = true)
+    @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToOne(optional = false)
-    @JoinColumn(name = "user_id", unique = true, nullable = false)
-    private User user;
-
     @OneToMany(mappedBy="customer")
     private List<Sales> sales;
-
-    @OneToMany(mappedBy="customer", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    private List<Address> addresses;
 }
