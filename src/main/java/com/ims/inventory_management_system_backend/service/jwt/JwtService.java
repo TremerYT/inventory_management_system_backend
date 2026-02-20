@@ -1,6 +1,8 @@
 package com.ims.inventory_management_system_backend.service.jwt;
 
 import com.ims.inventory_management_system_backend.dto.token.TokenPair;
+import com.ims.inventory_management_system_backend.entities.user.User;
+import com.ims.inventory_management_system_backend.repository.user.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -22,6 +24,7 @@ import java.util.function.Function;
 @Service
 @Slf4j
 public class JwtService {
+    private final UserRepository userRepository;
     @Value("${jwt.secret}")
     private String jwtSecret;
 
@@ -31,6 +34,10 @@ public class JwtService {
     @Value("${jwt.refresh_expiration}")
     private long refreshExpiration;
 
+    public JwtService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     private String generateToken(
             Authentication authentication,
             long expirationTime,
@@ -39,6 +46,8 @@ public class JwtService {
         UserDetails userprincipal = (UserDetails) authentication.getPrincipal();
         Date now = new Date();
 
+        claims.put("username", getUsernameFromEmail(userprincipal.getUsername()));
+
         return Jwts.builder()
                 .setSubject(userprincipal.getUsername())
                 .setIssuedAt(now)
@@ -46,6 +55,16 @@ public class JwtService {
                 .addClaims(claims)
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    private String getUsernameFromEmail(String email) {
+        return userRepository.findByEmail(email)
+                .map(User::getUserName)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public String extractUsername(String token) {
+        return extractClaim(token, c -> c.get("username", String.class));
     }
 
     public String generateAccessToken(Authentication authentication) {
@@ -105,7 +124,7 @@ public class JwtService {
         return claimsResolver.apply(parseToken(token));
     }
 
-    public String extractUserName(String token) {
+    public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 

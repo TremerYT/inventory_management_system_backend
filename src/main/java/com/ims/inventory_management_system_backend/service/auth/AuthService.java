@@ -4,11 +4,9 @@ import com.ims.inventory_management_system_backend.dto.login.LoginRequestDTO;
 import com.ims.inventory_management_system_backend.dto.register.RegisterRequestDTO;
 import com.ims.inventory_management_system_backend.dto.token.RefreshTokenRequest;
 import com.ims.inventory_management_system_backend.dto.token.TokenPair;
-import com.ims.inventory_management_system_backend.entities.customers.Customer;
 import com.ims.inventory_management_system_backend.entities.role.Role;
 import com.ims.inventory_management_system_backend.entities.role.RoleName;
 import com.ims.inventory_management_system_backend.entities.user.User;
-import com.ims.inventory_management_system_backend.repository.customer.CustomerRepository;
 import com.ims.inventory_management_system_backend.repository.role.RoleRepository;
 import com.ims.inventory_management_system_backend.repository.user.UserRepository;
 import com.ims.inventory_management_system_backend.service.jwt.JwtService;
@@ -32,7 +30,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AuthService {
     private final UserRepository userRepository;
-    private final CustomerRepository customerRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -41,38 +38,30 @@ public class AuthService {
 
     @Transactional
     public void registerUser(RegisterRequestDTO dto){
-        if (userRepository.existsByUserName(dto.getUserName())) {
-            throw new RuntimeException("Username already in use");
+        if (userRepository.existsByEmail(dto.getEmail())) {
+            throw new RuntimeException("Email already in use");
         }
 
         Role customRole = roleRepository
-                .findByName(RoleName.ROLE_CUSTOMER)
+                .findByName(RoleName.ROLE_ADMIN)
                 .orElseThrow(() -> new RuntimeException("Default Role not set"));
 
         User newUser = User
                 .builder()
-                .userName(dto.getUserName())
+                .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
+                .fullName(dto.getFullName())
+                .userName(dto.getUserName())
+                .businessName(dto.getBusinessName())
                 .roles(new HashSet<>(Set.of(customRole)))
                 .build();
         userRepository.save(newUser);
-
-        Customer newCustomer = Customer
-                .builder()
-                .customerCode("CUST-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase())
-                .firstName(dto.getFirstName())
-                .lastName(dto.getLastName())
-                .userName(dto.getUserName())
-                .phoneNumber(dto.getPhoneNumber())
-                .user(newUser)
-                .build();
-        customerRepository.save(newCustomer);
     }
 
     public TokenPair loginUser (LoginRequestDTO dto){
         Authentication authentication = authenticationManager.authenticate(
                new UsernamePasswordAuthenticationToken(
-                       dto.getUserName(),
+                       dto.getEmail(),
                        dto.getPassword()
                )
         );
@@ -90,8 +79,8 @@ public class AuthService {
             throw new IllegalArgumentException("Invalid refresh token");
         }
 
-        String user = jwtService.extractUserName(refreshToken);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(user);
+        String email = jwtService.extractEmail(refreshToken);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(
@@ -101,7 +90,5 @@ public class AuthService {
                 );
         String accessToken = jwtService.generateAccessToken(authenticationToken);
         return new TokenPair(accessToken, refreshToken);
-
-
     }
 }

@@ -9,26 +9,23 @@ import lombok.Data;
 @Data
 public class RegisterRequestDTO {
     @NotBlank(message = "First Name is required")
-    @Size(min = 2, max = 50, message = "First Name must be between 2 and 50 Characters")
-    private String firstName;
+    @Size(min = 2, max = 50, message = "Full Name must be between 2 and 50 Characters")
+    private String fullName;
 
-    @NotBlank(message = "Last Name is required")
-    @Size(min = 2, max = 50, message = "Last Name must be between 2 and 50 Characters")
-    private String lastName;
+    @NotBlank(message = "Username is required")
+    @Size(min = 2, max = 50, message = "Username must be between 2 and 50 Characters")
+    private String userName;
+
+    @NotBlank(message = "Business Name is required")
+    @Size(min = 2, max = 50, message = "Business Name must be between 2 and 50 Characters")
+    private String businessName;
 
     @Email(message = "Email must be valid")
     @NotBlank(message = "Email is required")
     private String email;
 
-    @NotBlank(message = "Email is required")
-    private String userName;
-
     @NotBlank(message = "Password is required")
     private String password;
-
-    @NotBlank(message = "Phone number is required")
-    @Pattern(regexp = "^(?:\\+254|254|0)(7\\d{8}|1\\d{8})$", message = "Invalid Kenyan Phone number")
-    private String phoneNumber;
 
     private final Boolean isActive = true;
 }
