@@ -1,10 +1,8 @@
 package com.ims.inventory_management_system_backend.dto.customer;
 
-import com.ims.inventory_management_system_backend.dto.address.AddressDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -14,8 +12,13 @@ public class CustomerResponseDTO {
     private String customerCode;
     private String firstName;
     private String lastName;
+    private String customerCategory;
     private String email;
     private String phoneNumber;
+    private String country;
+    private String city;
+    private String zipCode;
+    private Integer rewardPoints;
+    private String address;
     private Boolean isActive;
-    private List<AddressDTO> addresses;
 }
