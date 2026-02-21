@@ -1,12 +1,9 @@
 package com.ims.inventory_management_system_backend.entities.supplier;
 
-import com.ims.inventory_management_system_backend.entities.address.Address;
 import com.ims.inventory_management_system_backend.entities.purchase.Purchase;
-import com.ims.inventory_management_system_backend.entities.purchase.PurchaseReturn;
+import com.ims.inventory_management_system_backend.entities.sale.Sales;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -14,10 +11,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "suppliers")
+@Table(name = "customers")
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,31 +25,42 @@ public class Supplier {
     @Column(name = "supplier_code", nullable = false, unique = true, length = 30)
     private String supplierCode;
 
-    @Column(name="supplier_name", nullable = false)
-    private String supplierName;
+    @Column(name="first_name", nullable = false)
+    private String firstName;
+
+    @Column(name="last_name", nullable = false)
+    private String lastName;
 
     @Column(name = "company_name", nullable = false)
     private String companyName;
 
-    @Column(name="email", nullable = false, unique = true)
+    @Column(name="email", nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(name="phone_number", nullable = false, unique = true)
+    @Column(name="phone_number", nullable = false, unique = true, length = 20)
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Address> supplierAddresses;
+    @Column(name="city", nullable = false)
+    private String city;
 
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PurchaseReturn> purchaseReturns;
+    @Column(name="zip_code", nullable = false)
+    private String zipCode;
 
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Purchase> purchases;
+    @Column(name="address", nullable = false)
+    private String address;
+
+    @Column(name="is_active", nullable = false)
+    @Builder.Default
+    private Boolean isActive = true;
 
     @Column(updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy="supplier")
+    private List<Purchase> purchases;
 }
