@@ -1,7 +1,6 @@
 package com.ims.inventory_management_system_backend.entities.supplier;
 
 import com.ims.inventory_management_system_backend.entities.purchase.Purchase;
-import com.ims.inventory_management_system_backend.entities.sale.Sales;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
