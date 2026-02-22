@@ -3,6 +3,7 @@ package com.ims.inventory_management_system_backend.service.customer;
 import com.ims.inventory_management_system_backend.dto.customer.CustomerRequestDTO;
 import com.ims.inventory_management_system_backend.dto.customer.CustomerResponseDTO;
 import com.ims.inventory_management_system_backend.entities.customers.Customer;
+import com.ims.inventory_management_system_backend.entities.customers.CustomerCategory;
 import com.ims.inventory_management_system_backend.repository.customer.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -57,6 +58,7 @@ public class CustomerService {
         customer.setFirstName(request.getFirstName());
         customer.setLastName(request.getLastName());
         customer.setCustomerCode(customerCode);
+        customer.setCustomerCategory(CustomerCategory.valueOf(request.getCustomerCategory().toUpperCase()));
         customer.setEmail(request.getEmail());
         customer.setPhoneNumber(request.getPhoneNumber());
         customer.setCountry(request.getCountry());
@@ -73,6 +75,7 @@ public class CustomerService {
                 .id(customer.getId())
                 .firstName(customer.getFirstName())
                 .lastName(customer.getLastName())
+                .fullName(customer.getFirstName() + " " + customer.getLastName())
                 .customerCode(customer.getCustomerCode())
                 .email(customer.getEmail())
                 .phoneNumber(customer.getPhoneNumber())

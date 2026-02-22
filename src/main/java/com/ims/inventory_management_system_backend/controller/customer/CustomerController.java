@@ -17,7 +17,7 @@ import java.util.List;
 public class CustomerController {
     private final CustomerService customerService;
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<CustomerResponseDTO> createCustomer(@Valid @RequestBody CustomerRequestDTO request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(customerService.createCustomer(request));
     }

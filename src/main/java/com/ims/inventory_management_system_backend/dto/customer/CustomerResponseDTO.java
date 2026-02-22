@@ -14,6 +14,7 @@ public class CustomerResponseDTO {
     private String customerCode;
     private String firstName;
     private String lastName;
+    private String fullName;
     private String customerCategory;
     private String email;
     private String phoneNumber;
