@@ -1,6 +1,5 @@
 package com.ims.inventory_management_system_backend.service.sales;
 
-import com.ims.inventory_management_system_backend.dto.sales.SaleItemsRequestDTO;
 import com.ims.inventory_management_system_backend.dto.sales.SaleItemsResponseDTO;
 import com.ims.inventory_management_system_backend.dto.sales.SaleRequestDTO;
 import com.ims.inventory_management_system_backend.dto.sales.SaleResponseDTO;

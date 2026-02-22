@@ -1,6 +1,5 @@
 package com.ims.inventory_management_system_backend.dto.product;
 
-import com.ims.inventory_management_system_backend.entities.brands.Brand;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
