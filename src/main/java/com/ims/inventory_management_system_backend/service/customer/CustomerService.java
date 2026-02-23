@@ -76,6 +76,7 @@ public class CustomerService {
                 .firstName(customer.getFirstName())
                 .lastName(customer.getLastName())
                 .fullName(customer.getFirstName() + " " + customer.getLastName())
+                .customerCategory(customer.getCustomerCategory().name())
                 .customerCode(customer.getCustomerCode())
                 .email(customer.getEmail())
                 .phoneNumber(customer.getPhoneNumber())

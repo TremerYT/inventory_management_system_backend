@@ -1,16 +1,13 @@
 package com.ims.inventory_management_system_backend.service.sales;
 
+import com.ims.inventory_management_system_backend.dto.sales.SaleItemsRequestDTO;
 import com.ims.inventory_management_system_backend.dto.sales.SaleItemsResponseDTO;
 import com.ims.inventory_management_system_backend.dto.sales.SaleRequestDTO;
 import com.ims.inventory_management_system_backend.dto.sales.SaleResponseDTO;
-import com.ims.inventory_management_system_backend.entities.customers.Customer;
-import com.ims.inventory_management_system_backend.entities.product.Product;
 import com.ims.inventory_management_system_backend.entities.sale.PaymentStatus;
 import com.ims.inventory_management_system_backend.entities.sale.SaleItems;
 import com.ims.inventory_management_system_backend.entities.sale.SaleStatus;
 import com.ims.inventory_management_system_backend.entities.sale.Sales;
-import com.ims.inventory_management_system_backend.repository.customer.CustomerRepository;
-import com.ims.inventory_management_system_backend.repository.product.ProductRepository;
 import com.ims.inventory_management_system_backend.repository.sales.SalesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,57 +20,88 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SalesService {
     private final SalesRepository salesRepository;
-    private final CustomerRepository customerRepository;
-    private final ProductRepository productRepository;
+
+    @Transactional(readOnly = true)
+    public List<SaleResponseDTO> getAllSales() {
+        return salesRepository
+                .findAll()
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public SaleResponseDTO getSaleById(Long id) {
+        return mapToResponse (salesRepository.findById(id).orElseThrow(() -> new RuntimeException("Sale not found")));
+    }
+
+    @Transactional(readOnly = true)
+    public List<SaleItemsResponseDTO> getSaleItems(Long saleId) {
+        return salesRepository.findById(saleId)
+                .orElseThrow(() -> new RuntimeException("Sale not found"))
+                .getSaleItems()
+                .stream()
+                .map(this::mapItemToResponse)
+                .collect(Collectors.toList());
+    }
 
     @Transactional
     public SaleResponseDTO createSale(SaleRequestDTO request) {
-        Customer customer = customerRepository.findById(request.getCustomerId())
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
-
-        Sales sale = Sales.builder()
-                .referenceNumber(request.getReferenceNumber())
-                .date(request.getDate())
-                .customer(customer)
-                .shipping(request.getShipping())
-                .paid(request.getPaid())
-                .saleStatus(SaleStatus.valueOf(request.getSaleStatus()))
-                .paymentStatus(PaymentStatus.valueOf(request.getPaymentStatus()))
-                .remarks(request.getRemarks())
-                .build();
-
-        List<SaleItems> items = request.getItems().stream().map(itemDto -> {
-            Product product = productRepository.findById(itemDto.getProductId())
-                    .orElseThrow(() -> new RuntimeException("Product not found"));
-
-            if (product.getQuantity() < itemDto.getQuantity()) {
-                throw new RuntimeException("Insufficient stock for product: " + product.getProductName());
-            }
-
-            product.setQuantity(product.getQuantity() - itemDto.getQuantity());
-            productRepository.save(product);
-
-            double subTotal = itemDto.getQuantity() * itemDto.getUnitPrice() - (itemDto.getDiscount() != null ? itemDto.getDiscount() : 0.0);
-
-            return SaleItems.builder()
-                    .sale(sale)
-                    .product(product)
-                    .quantity(itemDto.getQuantity())
-                    .unitPrice(itemDto.getUnitPrice())
-                    .discount(itemDto.getDiscount())
-                    .subTotal(subTotal)
-                    .build();
-        }).collect(Collectors.toList());
-
-        double totalSubTotal = items.stream().mapToDouble(SaleItems::getSubTotal).sum();
-        double grandTotal = totalSubTotal + request.getShipping();
-
-        sale.setSaleItems(items);
-        sale.setSubTotal(totalSubTotal);
-        sale.setGrandTotal(grandTotal);
-
+        Sales sale = mapRequestToEntity(request);
         Sales savedSale = salesRepository.save(sale);
         return mapToResponse(savedSale);
+    }
+
+    @Transactional
+    public SaleResponseDTO updateSale(Long id, SaleRequestDTO request) {
+        Sales sale = salesRepository.findById(id)
+                .map(existingSale -> {
+                    existingSale.setReferenceNumber(request.getReferenceNumber());
+                    existingSale.setDate(request.getDate());
+                    existingSale.setShipping(request.getShipping());
+                    existingSale.setPaid(request.getPaid());
+                    existingSale.setSaleStatus(SaleStatus.valueOf(request.getSaleStatus().toUpperCase()));
+                    existingSale.setPaymentStatus(PaymentStatus.valueOf(request.getPaymentStatus().toUpperCase()));
+                    existingSale.setRemarks(request.getRemarks());
+                    existingSale.setSaleItems(mapItemsToEntity(request.getItems()));
+                    return existingSale;
+                })
+                .orElseGet(() -> {
+                    Sales newSale = mapRequestToEntity(request);
+                    newSale.setId(id);
+                    return newSale;
+                });
+
+        Sales updatedSale = salesRepository.save(sale);
+        return mapToResponse(updatedSale);
+    }
+
+    @Transactional
+    public void deleteSale(Long id) {
+        salesRepository.deleteById(id);
+    }
+
+    private Sales mapRequestToEntity(SaleRequestDTO request) {
+        return Sales.builder()
+                .referenceNumber(request.getReferenceNumber())
+                .date(request.getDate())
+                .shipping(request.getShipping())
+                .paid(request.getPaid())
+                .saleStatus(SaleStatus.valueOf(request.getSaleStatus().toUpperCase()))
+                .paymentStatus(PaymentStatus.valueOf(request.getPaymentStatus().toUpperCase()))
+                .remarks(request.getRemarks())
+                .saleItems(mapItemsToEntity(request.getItems()))
+                .build();
+    }
+
+    private List<SaleItems> mapItemsToEntity(List<SaleItemsRequestDTO> items) {
+        return items.stream().map(itemDto ->
+                SaleItems.builder()
+                        .quantity(itemDto.getQuantity())
+                        .unitPrice(itemDto.getUnitPrice())
+                        .discount(itemDto.getDiscount())
+                        .build()
+        ).collect(Collectors.toList());
     }
 
     private SaleResponseDTO mapToResponse(Sales sale) {
@@ -81,8 +109,8 @@ public class SalesService {
                 .id(sale.getId())
                 .referenceNumber(sale.getReferenceNumber())
                 .date(sale.getDate())
-                .customerId(sale.getCustomer().getId())
-                .customerName(sale.getCustomer().getFirstName() + " " + sale.getCustomer().getLastName())
+                .customerId(sale.getCustomer() != null ? sale.getCustomer().getId() : null)
+                .customerName(sale.getCustomer() != null ? sale.getCustomer().getFirstName() + " " + sale.getCustomer().getLastName() : null)
                 .shipping(sale.getShipping())
                 .paid(sale.getPaid())
                 .saleStatus(sale.getSaleStatus().name())
@@ -97,12 +125,9 @@ public class SalesService {
     private SaleItemsResponseDTO mapItemToResponse(SaleItems item) {
         return SaleItemsResponseDTO.builder()
                 .id(item.getId())
-                .productId(item.getProduct().getId())
-                .productName(item.getProduct().getProductName())
                 .quantity(item.getQuantity())
                 .unitPrice(item.getUnitPrice())
                 .discount(item.getDiscount())
-                .subTotal(item.getSubTotal())
                 .build();
     }
 }
