@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,30 +24,42 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "purchase_code", nullable = false, unique = true)
-    private String purchaseCode;
+    @Column(name = "reference_number", nullable = false, unique = true)
+    private String referenceNumber;
 
-    @Column(name = "status", nullable = false)
-    private String status;
+    @Column(name = "date", nullable = false)
+    private LocalDate date;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "supplier_id", nullable = false)
+    private Supplier supplier;
+
+    @Column(name = "shipping", nullable = false)
+    private Double shipping;
+
+    @Column(name = "purchase_status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private PurchaseStatus purchaseStatus;
+
+    @Column(name = "remarks")
+    private String remarks;
+
+    @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PurchaseItems> purchaseItems;
 
     @Column(name = "sub_total", nullable = false)
     private Double subTotal;
 
-    @Column(name = "discount", nullable = false)
-    private Double discount;
-
-    @Column(name = "total_amount", nullable = false)
-    private Double totalAmount;
+    @Column(name = "grand_total", nullable = false)
+    private Double grandTotal;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PurchaseItems> purchaseItems;
+    @Column(name = "updated_at", nullable = false)
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "supplier_id", nullable = false)
-    private Supplier supplier;
 
 }
