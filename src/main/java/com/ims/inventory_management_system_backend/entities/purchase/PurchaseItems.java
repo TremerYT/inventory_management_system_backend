@@ -1,6 +1,7 @@
 package com.ims.inventory_management_system_backend.entities.purchase;
 
 import com.ims.inventory_management_system_backend.entities.product.Product;
+import com.ims.inventory_management_system_backend.entities.sale.Sales;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,11 +20,19 @@ public class PurchaseItems {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "purchase_id", nullable = false)
+    private Purchase purchase;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @Column(name = "unit_cost", nullable = false)
-    private Double unitCost;
+    @Column(name = "unit_price", nullable = false)
+    private Double unitPrice;
 
     @Column(name = "discount", nullable = false)
     private Double discount;
@@ -31,15 +40,7 @@ public class PurchaseItems {
     @Column(name = "sub_total", nullable = false)
     private Double subTotal;
 
-    @ManyToOne
-    @JoinColumn(name = "purchase_id")
-    private Purchase purchase;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 }
