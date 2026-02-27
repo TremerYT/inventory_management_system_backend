@@ -1,9 +1,6 @@
 package com.ims.inventory_management_system_backend.dto.purchases;
 
-import lombok.Data;
-
-@Data
-public class PurchaseItemsRequestDTO {
+public class PurchaseItemsResponseDTO {
     private Long id;
     private Long productId;
     private String productName;
