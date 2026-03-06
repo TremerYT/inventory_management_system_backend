@@ -11,8 +11,10 @@ public class SupplierResponseDTO {
     private String firstName;
     private String lastName;
     private String fullName;
+    private String companyName;
     private String email;
     private String phoneNumber;
+    private String city;
     private String zipCode;
     private String address;
     private Boolean isActive;

@@ -27,6 +27,11 @@ public class SupplierController {
         return ResponseEntity.ok(supplierService.getAllSuppliers());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<SupplierResponseDTO> getSupplierById(@PathVariable Long id) {
+        return ResponseEntity.ok(supplierService.getSupplierById(id));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<SupplierResponseDTO> updateSupplier(@PathVariable Long id, @Valid @RequestBody SupplierRequestDTO request) {
         return ResponseEntity.ok(supplierService.updateSupplier(id, request));

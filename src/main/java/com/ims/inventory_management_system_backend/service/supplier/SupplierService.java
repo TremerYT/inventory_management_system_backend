@@ -39,6 +39,13 @@ public class SupplierService {
                 .toList();
     }
 
+    public SupplierResponseDTO getSupplierById(Long id) {
+        Supplier supplier = supplierRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Supplier does not exist"));
+        return mapSupplierToResponse(supplier);
+    }
+
     public SupplierResponseDTO updateSupplier(Long id, SupplierRequestDTO request) {
         Supplier supplierToBeUpdated = supplierRepository
                 .findById(id)
@@ -56,6 +63,7 @@ public class SupplierService {
         String supplierCode = generateSupplierCode();
         supplier.setFirstName(request.getFirstName());
         supplier.setLastName(request.getLastName());
+        supplier.setCompanyName(request.getCompanyName());
         supplier.setSupplierCode(supplierCode);
         supplier.setEmail(request.getEmail());
         supplier.setPhoneNumber(request.getPhoneNumber());
@@ -72,8 +80,10 @@ public class SupplierService {
                 .firstName(supplier.getFirstName())
                 .lastName(supplier.getLastName())
                 .fullName(supplier.getFirstName() + " " + supplier.getLastName())
+                .companyName(supplier.getCompanyName())
                 .supplierCode(supplier.getSupplierCode())
                 .email(supplier.getEmail())
+                .city(supplier.getCity())
                 .phoneNumber(supplier.getPhoneNumber())
                 .zipCode(supplier.getZipCode())
                 .address(supplier.getAddress())

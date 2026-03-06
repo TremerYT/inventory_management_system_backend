@@ -1,11 +1,8 @@
 package com.ims.inventory_management_system_backend.entities.purchase;
 
 import com.ims.inventory_management_system_backend.entities.product.Product;
-import com.ims.inventory_management_system_backend.entities.sale.Sales;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -15,6 +12,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class PurchaseItems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
