@@ -1,14 +1,14 @@
 package com.ims.inventory_management_system_backend.dto.purchases;
 
-import com.ims.inventory_management_system_backend.dto.sales.SaleItemsRequestDTO;
-import com.ims.inventory_management_system_backend.entities.purchase.PurchaseItems;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public class PuchaseRequestDTO {
+@Data
+public class PurchaseRequestDTO {
     @NotBlank(message = "Reference number is required")
     public String referenceNumber;
 
