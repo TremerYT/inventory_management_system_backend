@@ -7,4 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     @Query("SELECT COUNT(c) FROM Customer c WHERE CAST(c.createdAt AS date) = CURRENT_DATE")
     long countCustomerCreatedToday();
+    
+    @Query("SELECT COUNT(c) FROM Customer c")
+    long countTotalCustomers();
 }

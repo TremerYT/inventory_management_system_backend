@@ -1,6 +1,5 @@
 package com.ims.inventory_management_system_backend.entities.expense;
 
-import com.ims.inventory_management_system_backend.entities.category.Category;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -28,8 +27,8 @@ public class Expense {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+    @JoinColumn(name = "expense_category_id", nullable = false)
+    private ExpenseCategory expenseCategory;
 
     @Column(name = "date", nullable = false)
     private LocalDate date;

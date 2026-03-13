@@ -17,8 +17,8 @@ public class ExpenseResponseDTO {
     private Long id;
     private String expenseName;
     private String description;
-    private Long categoryId;
-    private String categoryName;
+    private Long expenseCategoryId;
+    private String expenseCategoryName;
     private LocalDate date;
     private Double expenseAmount;
     private ExpenseStatus status;

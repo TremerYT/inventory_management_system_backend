@@ -21,6 +21,8 @@ public class PurchaseRequestDTO {
     @NotNull(message = "Shipping is required")
     public Double shipping;
 
+    public Double paid;
+
     @NotBlank(message = "Sale status is required")
     public String purchaseStatus;
 

@@ -7,4 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface SupplierRepository extends JpaRepository<Supplier, Long> {
     @Query("SELECT COUNT(s) FROM Supplier s WHERE CAST(s.createdAt AS date) = CURRENT_DATE")
     long countSupplierCreatedToday();
+    
+    @Query("SELECT COUNT(s) FROM Supplier s")
+    long countTotalSuppliers();
 }

@@ -4,7 +4,6 @@ import com.ims.inventory_management_system_backend.entities.expense.ExpenseStatu
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Future;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,11 +21,10 @@ public class ExpenseRequestDTO {
 
     private String description;
 
-    @NotNull(message = "Category ID is required")
-    private Long categoryId;
+    @NotNull(message = "Expense category is required")
+    private Long expenseCategoryId;
 
     @NotNull(message = "Date is required")
-    @Future(message = "Date must be in the future or today")
     private LocalDate date;
 
     @NotNull(message = "Amount is required")

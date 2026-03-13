@@ -15,7 +15,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/expenses")
+@RequestMapping("/api/expense")
 public class ExpenseController {
     private final ExpenseService expenseService;
 
@@ -29,7 +29,7 @@ public class ExpenseController {
         return ResponseEntity.ok(expenseService.getExpenseById(id));
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<ExpenseResponseDTO> createExpense(@Valid @RequestBody ExpenseRequestDTO request) {
         ExpenseResponseDTO expense = expenseService.createExpense(request);
         return new ResponseEntity<>(expense, HttpStatus.CREATED);
@@ -48,9 +48,9 @@ public class ExpenseController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/category/{categoryId}")
-    public ResponseEntity<List<ExpenseResponseDTO>> getExpensesByCategory(@PathVariable Long categoryId) {
-        return ResponseEntity.ok(expenseService.getExpensesByCategory(categoryId));
+    @GetMapping("/category/{expenseCategoryId}")
+    public ResponseEntity<List<ExpenseResponseDTO>> getExpensesByCategory(@PathVariable Long expenseCategoryId) {
+        return ResponseEntity.ok(expenseService.getExpensesByCategory(expenseCategoryId));
     }
 
     @GetMapping("/status/{status}")

@@ -51,6 +51,9 @@ public class Purchase {
     @Column(name = "grand_total", nullable = false)
     private Double grandTotal;
 
+    @Column(name = "paid")
+    private Double paid;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;

@@ -22,4 +22,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p WHERE LOWER(p.productName) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(p.skuNumber) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<Product> searchProducts(@Param("query") String query);
+    
+    @Query("SELECT SUM(p.quantity * p.unitPrice) FROM Product p")
+    Double calculateTotalInventoryValue();
 }

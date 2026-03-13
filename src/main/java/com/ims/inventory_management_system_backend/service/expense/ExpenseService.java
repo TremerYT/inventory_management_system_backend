@@ -2,11 +2,11 @@ package com.ims.inventory_management_system_backend.service.expense;
 
 import com.ims.inventory_management_system_backend.dto.expense.ExpenseRequestDTO;
 import com.ims.inventory_management_system_backend.dto.expense.ExpenseResponseDTO;
-import com.ims.inventory_management_system_backend.entities.category.Category;
 import com.ims.inventory_management_system_backend.entities.expense.Expense;
+import com.ims.inventory_management_system_backend.entities.expense.ExpenseCategory;
 import com.ims.inventory_management_system_backend.entities.expense.ExpenseStatus;
-import com.ims.inventory_management_system_backend.repository.category.CategoryRepository;
 import com.ims.inventory_management_system_backend.repository.expense.ExpenseRepository;
+import com.ims.inventory_management_system_backend.repository.expense.ExpenseCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +16,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExpenseService {
     private final ExpenseRepository expenseRepository;
-    private final CategoryRepository categoryRepository;
+    private final ExpenseCategoryRepository expenseCategoryRepository;
 
     public ExpenseResponseDTO createExpense(ExpenseRequestDTO request) {
-        Category category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-
+        ExpenseCategory expenseCategory = expenseCategoryRepository.findById(request.getExpenseCategoryId())
+                .orElseThrow(() -> new RuntimeException("Expense category not found with id: " + request.getExpenseCategoryId()));
+        
         Expense expense = Expense.builder()
                 .expenseName(request.getExpenseName())
                 .description(request.getDescription())
-                .category(category)
+                .expenseCategory(expenseCategory)
                 .date(request.getDate())
                 .expenseAmount(request.getExpenseAmount())
                 .status(request.getStatus())
@@ -51,13 +51,13 @@ public class ExpenseService {
     public ExpenseResponseDTO updateExpense(Long id, ExpenseRequestDTO request) {
         Expense expense = expenseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Expense not found"));
-
-        Category category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+        
+        ExpenseCategory expenseCategory = expenseCategoryRepository.findById(request.getExpenseCategoryId())
+                .orElseThrow(() -> new RuntimeException("Expense category not found with id: " + request.getExpenseCategoryId()));
 
         expense.setExpenseName(request.getExpenseName());
         expense.setDescription(request.getDescription());
-        expense.setCategory(category);
+        expense.setExpenseCategory(expenseCategory);
         expense.setDate(request.getDate());
         expense.setExpenseAmount(request.getExpenseAmount());
         expense.setStatus(request.getStatus());
@@ -73,11 +73,8 @@ public class ExpenseService {
         expenseRepository.deleteById(id);
     }
 
-    public List<ExpenseResponseDTO> getExpensesByCategory(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-        
-        return expenseRepository.findByCategoryId(categoryId)
+    public List<ExpenseResponseDTO> getExpensesByCategory(Long expenseCategoryId) {
+        return expenseRepository.findByExpenseCategoryId(expenseCategoryId)
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
@@ -95,8 +92,8 @@ public class ExpenseService {
                 .id(expense.getId())
                 .expenseName(expense.getExpenseName())
                 .description(expense.getDescription())
-                .categoryId(expense.getCategory().getId())
-                .categoryName(expense.getCategory().getCategoryName())
+                .expenseCategoryId(expense.getExpenseCategory().getId())
+                .expenseCategoryName(expense.getExpenseCategory().getName())
                 .date(expense.getDate())
                 .expenseAmount(expense.getExpenseAmount())
                 .status(expense.getStatus())
